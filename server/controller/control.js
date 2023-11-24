@@ -46,7 +46,7 @@ const login =async(req,res)=>{
         },
         process.env.WEB_TOKEN_SECRET,
         {
-            expiresIn:"1hrs",
+            expiresIn:"30sec",
         }
     )
     res.cookie(String(userExisted._id),userToken,{
@@ -96,7 +96,38 @@ const getUser = async(req,res,next)=>{
 
 const refreshToken=(req,res,next)=>{
     const cookie = req.headers.cookie;
-    console.log(cookie);
+    const oldToken = cookie.split("=")[1];
+    if(!oldToken){
+        return res.status(400).json({message: "Something went wrong"})
+    }
+    jsonwebtoken.verify(oldToken.toString(),
+    process.env.WEB_TOKEN_SECRET,
+    (error,user)=>{
+        if(error){
+            console.log(error);
+            return res.status(403).json({
+                message:"Authentication failed."
+            })
+        }
+        res.clearCookie(`${user.id}`)
+        req.cookies[`${user.id}`] = "";
+
+        const newToken = jsonwebtoken.sign(
+            {id:user.id},
+            process.env.WEB_TOKEN_SECRET,
+            {
+                expiresIn: "30s",
+            }
+        );
+        res.cookie(String(user.id),newToken,{
+            path:'/',
+            expires: new Date(Date.now() = 1000 * 30),
+            httpOnly: true,
+            sameSite:"lax"
+        });
+        req.id = user.id;
+        next()
+    })
 }
 
 module.exports={
