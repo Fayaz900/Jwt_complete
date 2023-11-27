@@ -46,12 +46,12 @@ const login =async(req,res)=>{
         },
         process.env.WEB_TOKEN_SECRET,
         {
-            expiresIn:"30sec",
+            expiresIn:"40s",
         }
     )
     res.cookie(String(userExisted._id),userToken,{
         path :"/",
-        expires: new Date(Date.now()+ 1000 * 30),
+        expires: new Date(Date.now()+ 1000 * 40),
         httpOnly: true,
         sameSite: "lax",
     })
@@ -61,7 +61,7 @@ const login =async(req,res)=>{
 const userVerification = async(req,res,next)=>{
     const cookie = req.headers.cookie;
     const token = cookie.split("=")[1]
-    console.log(token);
+    console.log(token,'tokk');
     if(!token){
         res.status(400).json({message: "Invalid Credentials : Token error"})
     }
@@ -96,7 +96,9 @@ const getUser = async(req,res,next)=>{
 
 const refreshToken=(req,res,next)=>{
     const cookie = req.headers.cookie;
+    console.log(cookie,'cook');
     const oldToken = cookie.split("=")[1];
+    console.log(oldToken,'old');
     if(!oldToken){
         return res.status(400).json({message: "Something went wrong"})
     }
@@ -111,21 +113,27 @@ const refreshToken=(req,res,next)=>{
         }
         res.clearCookie(`${user.id}`)
         req.cookies[`${user.id}`] = "";
+        console.log('cookie set');
 
         const newToken = jsonwebtoken.sign(
             {id:user.id},
             process.env.WEB_TOKEN_SECRET,
             {
-                expiresIn: "30s",
+                expiresIn: "35s",
             }
         );
+
+        console.log('cookie set 2');
+
         res.cookie(String(user.id),newToken,{
             path:'/',
-            expires: new Date(Date.now() = 1000 * 30),
+            expires: new Date(Date.now() + 1000 * 30),
             httpOnly: true,
             sameSite:"lax"
         });
+        
         req.id = user.id;
+        console.log("done");
         next()
     })
 }
