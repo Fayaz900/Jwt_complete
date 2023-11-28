@@ -9,6 +9,7 @@ function Navbar() {
     <div className="links">
         <Link to="/">Login</Link>
         <Link to="/up">SignUp</Link>
+        <Link to="/logout">Log Out</Link>
     </div>
 
 </div>

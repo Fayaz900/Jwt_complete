@@ -5,10 +5,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignUp from './components/signup/Signup';
 import Home from './components/home/Home';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 axios.defaults.withCredentials = true
 
 function App() {
+  const isLoggedIn = useSelector((state)=>state.isLoggedIn)
+  console.log(isLoggedIn);
   return (
     <div>
       <Router>

@@ -51,7 +51,7 @@ const login =async(req,res)=>{
     )
     res.cookie(String(userExisted._id),userToken,{
         path :"/",
-        expires: new Date(Date.now()+ 1000 * 40),
+        expires: new Date(Date.now()+ 1000 * 30),
         httpOnly: true,
         sameSite: "lax",
     })
@@ -119,7 +119,7 @@ const refreshToken=(req,res,next)=>{
             {id:user.id},
             process.env.WEB_TOKEN_SECRET,
             {
-                expiresIn: "35s",
+                expiresIn: "40s",   
             }
         );
 
