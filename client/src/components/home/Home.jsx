@@ -36,6 +36,7 @@ function Home() {
     },1000*29)
     return ()=> clearInterval(interval)
   },[])
+  
  console.log(user,'userrr');
   return (
     <div>{user && <h1>{user.user.name}</h1>}</div>

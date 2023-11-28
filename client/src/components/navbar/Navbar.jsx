@@ -7,7 +7,7 @@ function Navbar() {
     <div>
     <div className='navbar'>
     <div className="links">
-        <Link to="/login">Login</Link>
+        <Link to="/">Login</Link>
         <Link to="/up">SignUp</Link>
     </div>
 
