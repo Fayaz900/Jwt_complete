@@ -32,7 +32,7 @@ function Home() {
       passRequest().then((data)=>setUser(data))
     }
     let interval = setInterval(()=>{
-      refreshTok().then((data)=>setUser(data.user))
+      refreshTok().then((data)=>setUser(data))
     },1000*29)
     return ()=> clearInterval(interval)
   },[])

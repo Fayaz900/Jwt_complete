@@ -96,9 +96,9 @@ const getUser = async(req,res,next)=>{
 
 const refreshToken=(req,res,next)=>{
     const cookie = req.headers.cookie;
-    console.log(cookie,'cook');
+    console.log(cookie);
     const oldToken = cookie.split("=")[1];
-    console.log(oldToken,'old');
+    // console.log(oldToken,'old');
     if(!oldToken){
         return res.status(400).json({message: "Something went wrong"})
     }
@@ -113,7 +113,7 @@ const refreshToken=(req,res,next)=>{
         }
         res.clearCookie(`${user.id}`)
         req.cookies[`${user.id}`] = "";
-        console.log('cookie set');
+        // console.log('cookie set');
 
         const newToken = jsonwebtoken.sign(
             {id:user.id},
@@ -123,7 +123,7 @@ const refreshToken=(req,res,next)=>{
             }
         );
 
-        console.log('cookie set 2');
+        // console.log('cookie set 2');
 
         res.cookie(String(user.id),newToken,{
             path:'/',
@@ -133,7 +133,7 @@ const refreshToken=(req,res,next)=>{
         });
         
         req.id = user.id;
-        console.log("done");
+        // console.log("done");
         next()
     })
 }
