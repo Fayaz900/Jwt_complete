@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 import './Login.css'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store';
 
 function Login() {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [data,setData] = useState({
     email:"",
@@ -28,6 +31,7 @@ function Login() {
     .catch((error)=>{
       console.log(error);
     })
+    
     const deta = await res.data;
     return deta;
   }
@@ -35,6 +39,8 @@ function Login() {
   const handleSubmit=(e)=>{
     e.preventDefault();
     senderFunction().then(()=>{
+      dispatch(authActions.login())
+    }).then(()=>{
       navigate('/home');
     })
   }

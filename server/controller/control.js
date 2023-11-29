@@ -60,6 +60,7 @@ const login =async(req,res)=>{
 
 const userVerification = async(req,res,next)=>{
     const cookie = req.headers.cookie;
+    console.log(cookie,"cookie in verificatiobnbb");
     const token = cookie.split("=")[1]
     console.log(token,'tokk');
     if(!token){
@@ -77,7 +78,6 @@ const userVerification = async(req,res,next)=>{
         }
     )
     next()
-
 }
 
 const getUser = async(req,res,next)=>{
@@ -136,6 +136,29 @@ const refreshToken=(req,res,next)=>{
         // console.log("done");
         next()
     })
+
+}
+
+const logout=(req,res,next)=>{
+    const cookie = req.headers.cookie;
+    console.log(cookie,"---cookkkk");
+    const oldToken = cookie.split("=")[1];
+    console.log(oldToken,"----old");
+    if(!oldToken){
+        return res.status(400).json({message:"Something went wrong!"})
+    }
+    jsonwebtoken.verify(
+        String(oldToken),
+        process.env.WEB_TOKEN_SECRET,
+        (error,user)=>{
+            if(error){
+                return res.status(403).json({message:"Authentication failed !"})
+            }
+            res.clearCookie(`${user.id}`)
+            req.cookies[`${user.id}`] = "";
+            return res.status(200).json({message:"Logged Out"})
+        }
+    )
 }
 
 module.exports={
@@ -145,4 +168,5 @@ module.exports={
     login,
     userVerification,
     refreshToken,
+    logout
 };
